@@ -2,3 +2,23 @@
 
 This project is for the Cimulation and Modeling course of the Summer
 2025 semester in Uni Koln.
+
+## TO-DO
+
+ - [ ] Setup
+ - [ ] Newton's equations
+ - [ ] Random configuration with sufficient particles
+ - [ ] Implement damping
+ - [ ] Try different time steps
+ - [ ] Check energy conservation
+ - [ ] Analyze floating point efficiency
+ - [ ] Describe formal scaling wrt N
+ - [ ] Improvement based on sparse systems?
+
+## Design decisions:
+
+ - ??
+
+## Outputs
+
+ - ??
