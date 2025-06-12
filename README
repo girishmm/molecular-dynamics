@@ -5,7 +5,7 @@ This project is for the Cimulation and Modeling course of the Summer
 
 ## TO-DO
 
- - [ ] Setup
+ - [x] Setup
  - [ ] Newton's equations
  - [ ] Random configuration with sufficient particles
  - [ ] Implement damping
@@ -17,7 +17,21 @@ This project is for the Cimulation and Modeling course of the Summer
 
 ## Design decisions:
 
- - ??
+ - Poetry for project management
+ - Animations of dynamics
+ - Slide flow (bottom-up):
+   - Single particle dynamics
+   - Symplectic schemes
+   - Scaling to multiple particles
+
+## Setup
+
+To replicate results
+
+ 1. Install [poetry](https://python-poetry.org/docs/)
+ 2. Clone the repo
+ 3. `$ poetry install`
+ 4. `python simulation.py`
 
 ## Outputs
 
