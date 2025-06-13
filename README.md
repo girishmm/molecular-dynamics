@@ -7,14 +7,13 @@ This project is for the Cimulation and Modeling course of the Summer
 
  - [x] Setup
  - [x] Single particle
-  - [x] Newton's equations
-  - [x] Potential definitions
-  - [x] Euler step
-  - [x] Verlet step
-  - [x] Check energy conservation
-  - [x] Try different time steps
- - [ ] Multi particle
-  - [ ] Random configuration with sufficient particles
+   - [x] Newton's equations
+   - [x] Potential definitions
+   - [x] Euler step
+   - [x] Verlet step
+   - [x] Check energy conservation
+   - [x] Try different time steps
+ - [ ] Multi particle with N=20
  - [ ] Implement damping
  - [ ] Analyze floating point efficiency
  - [ ] Describe formal scaling wrt N
@@ -104,14 +103,14 @@ By changing timestep from 0.01 to 0.005 and increasing steps to 10000
 ##### Euler steps
 
 <p float="left">
-  <img src="./img/single-particle/combined-euler/small-timestep/trajectory.mp4" width="200" />
+  <img src="./img/single-particle/combined-euler/small-timestep/trajectory.gif" width="200" />
   <img src="./img/single-particle/combined-euler/small-timestep/energy.png" width="400" />
 </p>
 
 ##### Verlet steps
 
 <p float="left">
-  <img src="./img/single-particle/combined-verlet/small-timestep/trajectory.mp4" width="200" />
+  <img src="./img/single-particle/combined-verlet/small-timestep/trajectory.gif" width="200" />
   <img src="./img/single-particle/combined-verlet/small-timestep/energy.png" width="400" />
 </p>
 
