@@ -11,11 +11,11 @@ This project is for the Cimulation and Modeling course of the Summer
   - [x] Potential definitions
   - [x] Euler step
   - [x] Verlet step
-  - [ ] Check energy conservation
+  - [x] Check energy conservation
+  - [x] Try different time steps
  - [ ] Multi particle
   - [ ] Random configuration with sufficient particles
  - [ ] Implement damping
- - [ ] Try different time steps
  - [ ] Analyze floating point efficiency
  - [ ] Describe formal scaling wrt N
  - [ ] Improvement based on sparse systems?
@@ -65,32 +65,56 @@ To replicate results
 
 #### Combined
 
-<p float="left">
-  <img src="./img/single-particle/combined-euler/trajectory.gif" width="200" />
-  <img src="./img/single-particle/combined-euler/energy.png" width="400" />
-</p>
+##### Euler steps
 
 <p float="left">
-  <img src="./img/single-particle/combined-verlet/trajectory.gif" width="200" />
-  <img src="./img/single-particle/combined-verlet/energy.png" width="400" />
+  <img src="./img/single-particle/combined-euler/normal/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-euler/normal/energy.png" width="400" />
+</p>
+
+#### Verlet steps
+
+<p float="left">
+  <img src="./img/single-particle/combined-verlet/normal/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-verlet/normal/energy.png" width="400" />
 </p>
 
 #### Combined (unstable)
 
 By changing A, B in lennard-jones from 1, 1 to 10, 10
 
-<p float="left">
-  <img src="./img/single-particle/combined-euler-unstable/trajectory.gif" width="200" />
-  <img src="./img/single-particle/combined-euler-unstable/energy.png" width="400" />
-</p>
+##### Euler steps
 
 <p float="left">
-  <img src="./img/single-particle/combined-verlet-unstable/trajectory.gif" width="200" />
-  <img src="./img/single-particle/combined-verlet-unstable/energy.png" width="400" />
+  <img src="./img/single-particle/combined-euler/unstable/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-euler/unstable/energy.png" width="400" />
+</p>
+
+##### Verlet steps
+
+<p float="left">
+  <img src="./img/single-particle/combined-verlet/unstable/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-verlet/unstable/energy.png" width="400" />
+</p>
+
+#### Combined (small timestep)
+
+By changing timestep from 0.01 to 0.005 and increasing steps to 10000
+
+##### Euler steps
+
+<p float="left">
+  <img src="./img/single-particle/combined-euler/small-timestep/trajectory.mp4" width="200" />
+  <img src="./img/single-particle/combined-euler/small-timestep/energy.png" width="400" />
+</p>
+
+##### Verlet steps
+
+<p float="left">
+  <img src="./img/single-particle/combined-verlet/small-timestep/trajectory.mp4" width="200" />
+  <img src="./img/single-particle/combined-verlet/small-timestep/energy.png" width="400" />
 </p>
 
 ### Multi-particle
 
-### With euler step
-
-### With verlet step
+Adding in more particles (say 20), and simulating again
