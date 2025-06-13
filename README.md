@@ -1,6 +1,6 @@
 # Molecular dynamics
 
-This project is for the Cimulation and Modeling course of the Summer
+This project is for the Simulation and Modeling course of the Summer
 2025 semester in Uni Koln.
 
 ## TO-DO
@@ -13,7 +13,7 @@ This project is for the Cimulation and Modeling course of the Summer
    - [x] Verlet step
    - [x] Check energy conservation
    - [x] Try different time steps
- - [ ] Multi particle with N=20
+ - [x] Multi particle with N=20
  - [ ] Implement damping
  - [ ] Analyze floating point efficiency
  - [ ] Describe formal scaling wrt N
@@ -22,11 +22,20 @@ This project is for the Cimulation and Modeling course of the Summer
 ## Design decisions:
 
  - Poetry for project management
- - Animations of dynamics
  - Slide flow (bottom-up):
    - Single particle dynamics
    - Symplectic schemes
    - Scaling to multiple particles
+ - Single particle
+   - potential wrt the origin as no pairwise potentials
+ - Animation of dynamics
+   - Skip frames in between for faster animation
+   - Shorter trail length on scaling particles
+ - Multi particle
+   - Change parameters to prevent exploding energy/enormous forces
+   - Cap force to prevent explosion (removed later)
+   - Super small time step for stability (found sweet spot)
+   - Bounding box to prevent particles from moving too far
 
 ## Setup
 
@@ -116,4 +125,14 @@ By changing timestep from 0.01 to 0.005 and increasing steps to 10000
 
 ### Multi-particle
 
-Adding in more particles (say 20), and simulating again
+Adding in more particles (say 20), and simulating again with different
+parameters to try stability
+
+<p float="left">
+  <img src="./img/multi-particle/not-almost/trajectory.gif" width="200" />
+  <img src="./img/multi-particle/not-almost/energy.png" width="400" />
+</p>
+
+We notice no stable energy despite verlet, why? cause the forces don't
+play well together. need prior info on type of molecules to set
+parameters accordingly
