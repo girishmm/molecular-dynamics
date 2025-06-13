@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 # Simulation parameters
-dt = 0.01
-num_steps = 1000
+dt = 0.005
+num_steps = 10000
 mass = 1.0
 
 x, y = 1.5, 0.0
@@ -30,7 +30,7 @@ def morse_potential(r, De=1.0, a=1.0, r_eq=1.0):
 def compute_force(x, y):
     r = np.sqrt(x**2 + y**2)
     harmonic_V, harmonic_F_mag = harmonic_potential(r)
-    lennard_jones_V, lennard_jones_F_mag = lennard_jones_potential(r)
+    lennard_jones_V, lennard_jones_F_mag = lennard_jones_potential(r, A=10.0, B=10.0)
     morse_V, morse_F_mag = morse_potential(r)
 
     V = harmonic_V + lennard_jones_V + morse_V
@@ -46,8 +46,8 @@ def euler_step(x, y, vx, vy, ax, ay, dt):
     vx_new = vx + dt * ax
     vy_new = vy + dt * ay
 
-    x_new = x + dt * vx_new
-    y_new = y + dt * vy_new
+    x_new = x + dt * vx
+    y_new = y + dt * vy
 
     return x_new, y_new, vx_new, vy_new
 
@@ -123,7 +123,7 @@ def plot_energy(time, kinetic, potential, total, name):
     ax.grid()
     plt.savefig(f'{name}_energy.png')
 
-def animate_trajectory(positions, name):
+def animate_trajectory(positions, name, fps=20, frame_skip=3):
     fig, ax = plt.subplots(figsize=(6, 6))
     ax.set_xlim(np.min(positions[:, 0]) - 0.5, np.max(positions[:, 0]) + 0.5)
     ax.set_ylim(np.min(positions[:, 1]) - 0.5, np.max(positions[:, 1]) + 0.5)
@@ -134,29 +134,39 @@ def animate_trajectory(positions, name):
     particle, = ax.plot([], [], 'ro')
     trail, = ax.plot([], [], 'b-', lw=1)
 
+    # For faster animation
+    animated_positions = positions[::frame_skip]
+
     def init():
         particle.set_data([], [])
         trail.set_data([], [])
         return particle, trail
 
     def update(frame):
-        particle.set_data([positions[frame][0]], [positions[frame][1]])
-        trail.set_data(positions[:frame+1, 0], positions[:frame+1, 1])
+        current_pos = animated_positions[frame]
+        particle.set_data([current_pos[0]], [current_pos[1]])
+        trail.set_data(positions[:(frame * frame_skip) + 1, 0], positions[:(frame * frame_skip) + 1, 1])
+
         return particle, trail
 
-    ani = animation.FuncAnimation(fig, update, frames=len(positions),
+
+    Writer = animation.writers['ffmpeg']
+    writer = Writer(fps=fps, metadata=dict(artist='Me'), bitrate=1800)
+
+    ani = animation.FuncAnimation(fig, update, frames=len(animated_positions),
                                   init_func=init, blit=True, interval=20)
 
-    ani.save(f'{name}_trajectory.gif', writer='pillow', fps=50)
-    print(f"Animation saved as {name}_trajectory.gif")
+    output_filename = f'{name}_trajectory.mp4'
+    ani.save(output_filename, writer=writer)
+    print(f"Animation saved as {output_filename}")
     plt.close(fig)
 
 # Run simulation
 time = np.arange(0, num_steps * dt, dt)
 all_energies = {}
-name = 'combined'
+name = 'combined-eu'
 
-positions, KE, PE, TE = simulate(x, y, vx, vy, 'verlet')
+positions, KE, PE, TE = simulate(x, y, vx, vy, 'euler')
 
 plot_trajectory(positions, name)
 plot_energy(time, KE, PE, TE, name)
