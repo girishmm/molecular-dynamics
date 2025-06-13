@@ -7,6 +7,9 @@ dt = 0.01
 num_steps = 1000
 mass = 1.0
 
+x, y = 1.5, 0.0
+vx, vy = 0.0, 1.0
+
 # Potential definitions
 def harmonic_potential(r, k=1.0, r_eq=0.0):
     V = 0.5 * k * (r - r_eq)**2
@@ -23,38 +26,66 @@ def morse_potential(r, De=1.0, a=1.0, r_eq=1.0):
     F = -2 * De * a * (1 - np.exp(-a * (r - r_eq))) * np.exp(-a * (r - r_eq))
     return V, F
 
-# Step definition
-def euler_step(y, h, f):
-    return y + h*f
+# Force calculation
+def compute_force(x, y):
+    r = np.sqrt(x**2 + y**2)
+    harmonic_V, harmonic_F_mag = harmonic_potential(r)
+    lennard_jones_V, lennard_jones_F_mag = lennard_jones_potential(r)
+    morse_V, morse_F_mag = morse_potential(r)
 
-def simulate(potential_func):
+    V = harmonic_V + lennard_jones_V + morse_V
+    F_mag = harmonic_F_mag + lennard_jones_F_mag + morse_F_mag
 
-    x, y = 1.5, 0.0
-    vx, vy = 0.0, 1.0
+    fx = F_mag * (x / r)
+    fy = F_mag * (y / r)
 
+    return V, fx, fy
+
+# Step definitions
+def euler_step(x, y, vx, vy, ax, ay, dt):
+    vx_new = vx + dt * ax
+    vy_new = vy + dt * ay
+
+    x_new = x + dt * vx_new
+    y_new = y + dt * vy_new
+
+    return x_new, y_new, vx_new, vy_new
+
+def verlet_step(x, y, vx, vy, ax, ay, dt):
+    x_new = x + vx * dt + 0.5 * ax * dt**2
+    y_new = y + vy * dt + 0.5 * ay * dt**2
+
+    _, fx_new, fy_new = compute_force(x_new, y_new)
+    ax_new = fx_new / mass
+    ay_new = fy_new / mass
+
+    vx_new = vx + 0.5 * (ax + ax_new) * dt
+    vy_new = vy + 0.5 * (ay + ay_new) * dt
+
+    return x_new, y_new, vx_new, vy_new, ax_new, ay_new
+
+
+def simulate(x, y, vx, vy, method='euler'):
     positions = []
     kinetic_energies = []
     potential_energies = []
     total_energies = []
 
+    V, fx, fy = compute_force(x, y)
+    ax = fx / mass
+    ay = fy / mass
+
     for _ in range(num_steps):
-        r = np.sqrt(x**2 + y**2)
-        V, F_mag = potential_func(r)
-
-        # Compute force
-        fx = F_mag * (x / r)
-        fy = F_mag * (y / r)
-
-        # Compute acceleration
-        ax = fx / mass
-        ay = fy / mass
-
-        # Take step
-        vx = euler_step(vx, dt, ax)
-        vy = euler_step(vy, dt, ay)
-
-        x = euler_step(x, dt, vx)
-        y = euler_step(y, dt, vy)
+        if method == 'euler':
+            x, y, vx, vy = euler_step(x, y, vx, vy, ax, ay, dt)
+            V, fx, fy = compute_force(x, y)
+            ax = fx / mass
+            ay = fy / mass
+        elif method == 'verlet':
+            x, y, vx, vy, ax, ay = verlet_step(x, y, vx, vy, ax, ay, dt)
+            V, _, _ = compute_force(x, y)
+        else:
+            raise ValueError(f"Unknown integration method: {method}")
 
         positions.append([x, y])
 
@@ -64,6 +95,7 @@ def simulate(potential_func):
         total_energies.append(KE + V)
 
     return np.array(positions), np.array(kinetic_energies), np.array(potential_energies), np.array(total_energies)
+
 
 def plot_trajectory(positions, name):
     plt.figure(figsize=(6, 6))
@@ -122,16 +154,10 @@ def animate_trajectory(positions, name):
 # Run simulation
 time = np.arange(0, num_steps * dt, dt)
 all_energies = {}
+name = 'combined'
 
-potentials = {
-    'Harmonic': harmonic_potential,
-    'Lennard-Jones': lennard_jones_potential,
-    'Morse': morse_potential
-}
+positions, KE, PE, TE = simulate(x, y, vx, vy, 'verlet')
 
-for name, potential_func in potentials.items():
-    positions, KE, PE, TE = simulate(potential_func)
-
-    plot_trajectory(positions, name)
-    plot_energy(time, KE, PE, TE, name)
-    animate_trajectory(positions, name)
+plot_trajectory(positions, name)
+plot_energy(time, KE, PE, TE, name)
+animate_trajectory(positions, name)
