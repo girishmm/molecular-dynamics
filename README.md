@@ -10,12 +10,12 @@ This project is for the Cimulation and Modeling course of the Summer
   - [x] Newton's equations
   - [x] Potential definitions
   - [x] Euler step
+  - [x] Verlet step
+  - [ ] Check energy conservation
  - [ ] Multi particle
   - [ ] Random configuration with sufficient particles
-  - [ ] Verlet step
  - [ ] Implement damping
  - [ ] Try different time steps
- - [ ] Check energy conservation
  - [ ] Analyze floating point efficiency
  - [ ] Describe formal scaling wrt N
  - [ ] Improvement based on sparse systems?
@@ -45,25 +45,49 @@ To replicate results
 #### Only harmonic force field
 
 <p float="left">
-  <img src="./img/single-particle/harmonic/trajectory.gif" width="300" />
+  <img src="./img/single-particle/harmonic/trajectory.gif" width="200" />
   <img src="./img/single-particle/harmonic/energy.png" width="400" />
 </p>
 
 #### Only lennard-jones force field
 
 <p float="left">
-  <img src="./img/single-particle/lennard-jones/trajectory.gif" width="300" />
+  <img src="./img/single-particle/lennard-jones/trajectory.gif" width="200" />
   <img src="./img/single-particle/lennard-jones/energy.png" width="400" />
 </p>
 
 #### Only morse force field
 
 <p float="left">
-  <img src="./img/single-particle/morse/trajectory.gif" width="300" />
+  <img src="./img/single-particle/morse/trajectory.gif" width="200" />
   <img src="./img/single-particle/morse/energy.png" width="400" />
 </p>
 
 #### Combined
+
+<p float="left">
+  <img src="./img/single-particle/combined-euler/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-euler/energy.png" width="400" />
+</p>
+
+<p float="left">
+  <img src="./img/single-particle/combined-verlet/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-verlet/energy.png" width="400" />
+</p>
+
+#### Combined (unstable)
+
+By changing A, B in lennard-jones from 1, 1 to 10, 10
+
+<p float="left">
+  <img src="./img/single-particle/combined-euler-unstable/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-euler-unstable/energy.png" width="400" />
+</p>
+
+<p float="left">
+  <img src="./img/single-particle/combined-verlet-unstable/trajectory.gif" width="200" />
+  <img src="./img/single-particle/combined-verlet-unstable/energy.png" width="400" />
+</p>
 
 ### Multi-particle
 
